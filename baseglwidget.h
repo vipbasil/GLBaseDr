@@ -4,6 +4,7 @@
 #include <QFile>
 #include "QOpenGLShaderProgram"
 #include <vector>
+#include "draw.h"
 
 
 class BaseGLWidget : public QOpenGLWidget{
@@ -20,6 +21,7 @@ class BaseGLWidget : public QOpenGLWidget{
         int vertexAttr;
         int colorAttr;
         int matrixUniform;
+        Draw *pen;
 
 };
 

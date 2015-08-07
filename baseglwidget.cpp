@@ -27,6 +27,8 @@ void BaseGLWidget::initializeGL(){
     colorAttr = shader_program.attributeLocation("colorAttr");
     matrixUniform = shader_program.uniformLocation("matrix");
 
+    pen = new Draw(&shader_program, vertexAttr, colorAttr);
+
 }
 
 void BaseGLWidget::paintGL(){
@@ -48,7 +50,7 @@ void BaseGLWidget::paintGL(){
     std::vector<float> colors;
 
     vertices.resize(9);
-    colors.resize(9);
+    colors.resize(3);
 
     vertices[0] = 0.0f;
     vertices[1] = 1.0f;
@@ -62,29 +64,23 @@ void BaseGLWidget::paintGL(){
     vertices[7] = 0.0f;
     vertices[8] = 0.0f;
 
-    colors[0] = 0.0f;
-    colors[1] = 1.0f;
+    colors[0] = 0.5f;
+    colors[1] = 0.5f;
     colors[2] = 0.0f;
 
-    colors[3] = 1.0f;
-    colors[4] = 0.0f;
-    colors[5] = 0.0f;
+    pen->addTriangle(vertices, colors);
 
-    colors[6] = 0.0f;
-    colors[7] = 0.0f;
-    colors[8] = 1.0f;
+    colors[0] = 0.5f;
+    colors[1] = 0.5f;
+    colors[2] = 0.5f;
 
-    shader_program.setAttributeArray(vertexAttr, vertices.data(), 3);
-    shader_program.setAttributeArray(colorAttr, colors.data(), 3);
+    vertices[6] = -0.5f;
+    vertices[7] = 0.0f;
+    vertices[8] = 0.0f;
 
-    shader_program.enableAttributeArray(vertexAttr);
-    shader_program.enableAttributeArray(colorAttr);
+    pen->addTriangle(vertices, colors);
 
-    glDrawArrays(GL_TRIANGLES, 0, 3);
-
-    shader_program.disableAttributeArray(vertexAttr);
-    shader_program.disableAttributeArray(colorAttr);
-
+    pen->Paint();
     //release the  binded shader program
     shader_program.release();
 
