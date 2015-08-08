@@ -149,8 +149,6 @@ void Draw::addLine(std::vector<float> points, std::vector<float> color, float wi
     }
     colors.push_back(allcolor);
 
-
-
 }
 
 void Draw::deleteObject(int index)
@@ -190,5 +188,15 @@ void Draw::Paint(int index)
         }
 
 
+}
+
+void Draw::setHeight(unsigned int h)
+{
+    Height  = h;
+}
+
+void Draw::setWidth(unsigned int w)
+{
+    Width = w;
 }
 

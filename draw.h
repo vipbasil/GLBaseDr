@@ -18,6 +18,9 @@ class Draw
         float dist(std::vector<float> points);
         float angle(std::vector<float> points);
         void Paint( int index = -1);
+        void setHeight(unsigned int );
+        void setWidth(unsigned int );
+
 
    private:
 
@@ -31,6 +34,8 @@ class Draw
         int colorAttr;
         int countAttr;
         int modelViewMatrix;
+        int Width;
+        int Height;
 
 
 

@@ -30,6 +30,7 @@ void BaseGLWidget::initializeGL(){
 
     pen = new Draw(&shader_program, vertexAttr, colorAttr, modelViewMatrix);
 
+
 }
 
 void BaseGLWidget::paintGL(){
@@ -42,6 +43,8 @@ void BaseGLWidget::paintGL(){
     QMatrix4x4 matrix;
     matrix.ortho( -2.0f, 2.0f, -2.0f, 2.0f, 2.0f, -2.0f);
     matrix.translate(0.0f, 0.0f, 1.0f);
+    matrix.scale(2.0f / 400.0f, 2.0f / 300.0f, 0);
+    //this->geometry.width();
 
     shader_program.setUniformValue(matrixUniform, matrix);
 
@@ -86,12 +89,20 @@ void BaseGLWidget::paintGL(){
     colors[2] = 0.5f;
 
 
-    pen->addLine(vertices, colors, 0.4f);
+    vertices[0] = 0.f;
+    vertices[1] = 0.f;
+    vertices[2] = 0.0f;
+
+    vertices[3] = 200.0f;
+    vertices[4] = 200.0f;
+    vertices[5] = 0.0f;
+
+    pen->addLine(vertices, colors, 4.f);
 
     colors[0] = 1.0f;
     colors[1] = 1.0f;
     colors[2] = 0.5f;
-    pen->addCircle(vertices, colors, 1.0f, 50);
+    //pen->addCircle(vertices, colors, 1.0f, 50);
 
     pen->Paint();
     //release the  binded shader program
@@ -102,6 +113,16 @@ void BaseGLWidget::paintGL(){
 
 void BaseGLWidget::resizeGL(int width, int height){
     glViewport(0, 0, width, height);
+    //translate the camera away
+    QMatrix4x4 matrix;
+    matrix.ortho( -2.0f, 2.0f, -2.0f, 2.0f, 2.0f, -2.0f);
+    matrix.translate(0.0f, 0.0f, 1.0f);
+    matrix.scale(2.0f / width, 2.0f / height, 0);
+    //this->geometry.width();
+
+    shader_program.setUniformValue(matrixUniform, matrix);
+    pen->setHeight(height);
+    pen->setWidth(width);
 
 }
 
