@@ -21,6 +21,7 @@ class BaseGLWidget : public QOpenGLWidget{
         int vertexAttr;
         int colorAttr;
         int matrixUniform;
+        int modelViewMatrix;
         Draw *pen;
 
 };

@@ -33,8 +33,8 @@ void Draw::addCircle(std::vector<float> point, std::vector<float> color, int rad
 
 }
 
-void Draw::addLine(std::vector<float> points, std::vector<float> color, float width)
-{
+void Draw::addLine(std::vector<float> points, std::vector<float> color, float width){
+
     float line_long = dist(points);
     float alpha = angle(points);
     std::vector<float> local_vertices;
@@ -66,7 +66,7 @@ void Draw::addLine(std::vector<float> points, std::vector<float> color, float wi
     local_vertices[4] = width;
     local_vertices[5] = 0.0f;
 
-   glRotatef(alpha, );
+    glRotatef(alpha,0, 0, 1);
 
 
 }

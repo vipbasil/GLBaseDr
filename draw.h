@@ -2,7 +2,7 @@
 #define DRAW_H
 #include <vector>
 #include <QOpenGLShaderProgram>
-//#include <strings.h>
+#include <math.h>
 
 
 class Draw
@@ -21,10 +21,14 @@ class Draw
    private:
         std::vector< std::vector<float> > vertices;
         std::vector< std::vector<float> > colors;
+        std::vector< QMatrix4x4 > transformations;
+
         QOpenGLShaderProgram *shader_program;
+
         int vertexAttr;
         int colorAttr;
         int countAttr;
+        int modelViewMatrix;
 
 
 };
