@@ -17,8 +17,11 @@ void Draw::addTriangle(std::vector<float> points, std::vector<float> color)
     QMatrix4x4 matrix;
     matrix.setToIdentity();
 
-   // matrix.scale(0.5f, 0.6f);
-    matrix.rotate(1.2f, 1, 1, 0);
+    //matrix.scale(0.5f, 0.6f);
+    //matrix.translate(1, 1, 1);
+    //matrix.rotate(10.f,0, 0, 1);
+    //matrix.translate(-1, -1, -1);
+
     transformations.push_back(matrix);
     vertices.push_back(points);
 
@@ -34,9 +37,60 @@ void Draw::addTriangle(std::vector<float> points, std::vector<float> color)
 
 }
 
-void Draw::addCircle(std::vector<float> point, std::vector<float> color, int radius, int tessellation)
+void Draw::addCircle(std::vector<float> point, std::vector<float> color, int radius,unsigned int tessellation)
 {
+    //the array length = number of triangles(tessellation) times number of vertices in each triangle, times the number of coordinates x,y,z =3
+    unsigned int array_length = tessellation * 3 * 3;
 
+    //we prepare affine transformation matrix  RT
+    QMatrix4x4 matrix;
+    matrix.setToIdentity();
+    matrix.translate(point[0], point[1], point[2]);
+
+    transformations.push_back(matrix);
+
+    //prepare colors array
+    std::vector<float> allcolor;
+    allcolor.resize(array_length);
+
+    unsigned int i = 0;
+    while (i < array_length){
+        allcolor[i + 0] = color[0];
+        allcolor[i + 1] = color[1];
+        allcolor[i + 2] = color[2];
+        i += 3;
+    }
+    colors.push_back(allcolor);
+
+    std::vector<float> local_vertices;
+    local_vertices.resize(array_length);
+
+    i = 0;
+    float ex_alpha = 0.0f;
+    while (i <= tessellation){
+        float alpha = 2 * M_PI / tessellation * i;
+        if (i == 0){
+            ex_alpha = alpha;
+            ++i;
+            continue;
+        }
+        //creating points for the the triangle
+        unsigned int j = (i - 1) * 9;
+        local_vertices[j + 0] = 0.0f;
+        local_vertices[j + 1] = 0.0f;
+        local_vertices[j + 2] = 0.0f;
+
+        local_vertices[j + 3] = radius * cos(alpha);
+        local_vertices[j + 4] = radius * sin(alpha);
+        local_vertices[j + 5] = 0.0f;
+
+        local_vertices[j + 6] = radius * cos(ex_alpha);
+        local_vertices[j + 7] = radius * sin(ex_alpha);
+        local_vertices[j + 8] = 0.0f;
+        ex_alpha = alpha;
+        ++i;
+    }
+    vertices.push_back(local_vertices);
 }
 
 void Draw::addLine(std::vector<float> points, std::vector<float> color, float width){
@@ -46,33 +100,55 @@ void Draw::addLine(std::vector<float> points, std::vector<float> color, float wi
     std::vector<float> local_vertices;
     local_vertices.resize(18);
 
+    //we prepare affine transformation matrix  RT
+    QMatrix4x4 matrix;
+    matrix.setToIdentity();
+    matrix.translate(points[0], points[1], points[2]);
+    matrix.rotate(alpha * 180 / M_PI, 0, 0, 1);
+
+    transformations.push_back(matrix);
+
     //creating points for the first triangle
-    local_vertices[0] = 0.0f;
-    local_vertices[1] = 0.0f;
+    local_vertices[0] = 0;
+    local_vertices[1] = -width / 2.0f;
     local_vertices[2] = 0.0f;
 
-    local_vertices[3] = line_long;
-    local_vertices[4] = 0.0f;
+    local_vertices[3] = line_long ;
+    local_vertices[4] = -width / 2.0f;
     local_vertices[5] = 0.0f;
 
-    local_vertices[3] = 0.0f;
-    local_vertices[4] = width;
-    local_vertices[5] = 0.0f;
+    local_vertices[6] = 0.0f;
+    local_vertices[7] = width / 2.0f;
+    local_vertices[8] = 0.0f;
 
     //creating points for the second triangle
-    local_vertices[0] = line_long;
-    local_vertices[1] = width;
-    local_vertices[2] = 0.0f;
+    local_vertices[9] = line_long;
+    local_vertices[10] = width / 2.0f;
+    local_vertices[11] = 0.0f;
 
-    local_vertices[3] = line_long;
-    local_vertices[4] = 0.0f;
-    local_vertices[5] = 0.0f;
+    local_vertices[12] = line_long;
+    local_vertices[13] = -width / 2.0f;
+    local_vertices[14] = 0.0f;
 
-    local_vertices[3] = 0.0f;
-    local_vertices[4] = width;
-    local_vertices[5] = 0.0f;
+    local_vertices[15] = 0.0f;
+    local_vertices[16] = width / 2.0f;
+    local_vertices[17] = 0.0f;
 
-    glRotatef(alpha,0, 0, 1);
+    vertices.push_back(local_vertices);
+
+    //prepare colors array
+    std::vector<float> allcolor;
+    allcolor.resize(18);
+    unsigned int i = 0;
+    while (i < local_vertices.size()){
+        allcolor[i + 0] = color[0];
+        allcolor[i + 1] = color[1];
+        allcolor[i + 2] = color[2];
+
+        i += 3;
+    }
+    colors.push_back(allcolor);
+
 
 
 }
@@ -106,7 +182,7 @@ void Draw::Paint(int index)
             shader_program->enableAttributeArray(vertexAttr);
             shader_program->enableAttributeArray(colorAttr);
 
-            glDrawArrays(GL_TRIANGLES, 0, 3);
+            glDrawArrays(GL_TRIANGLES, 0, vertices[i].size() / 3);
 
             shader_program->disableAttributeArray(vertexAttr);
             shader_program->disableAttributeArray(colorAttr);

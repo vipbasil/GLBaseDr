@@ -81,6 +81,18 @@ void BaseGLWidget::paintGL(){
 
     pen->addTriangle(vertices, colors);
 
+    colors[0] = 0.5f;
+    colors[1] = 1.0f;
+    colors[2] = 0.5f;
+
+
+    pen->addLine(vertices, colors, 0.4f);
+
+    colors[0] = 1.0f;
+    colors[1] = 1.0f;
+    colors[2] = 0.5f;
+    pen->addCircle(vertices, colors, 1.0f, 50);
+
     pen->Paint();
     //release the  binded shader program
     shader_program.release();
