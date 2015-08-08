@@ -8,7 +8,7 @@
 class Draw
 {
     public:
-        Draw( QOpenGLShaderProgram *program, int LvertexAttr, int LcolorAttr);
+        Draw( QOpenGLShaderProgram *program, int LvertexAttr, int LcolorAttr, int LmodelViewMatrix);
         void addTriangle(std::vector<float> points, std::vector<float> color );
         void addCircle(std::vector<float> point, std::vector<float> color, int radius = 10, int tessellation = 36);
         void addLine(std::vector<float> points, std::vector<float> color, float width = 1);
@@ -19,6 +19,7 @@ class Draw
         void Paint( int index = -1);
 
    private:
+
         std::vector< std::vector<float> > vertices;
         std::vector< std::vector<float> > colors;
         std::vector< QMatrix4x4 > transformations;

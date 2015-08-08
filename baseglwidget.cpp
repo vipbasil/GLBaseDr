@@ -26,8 +26,9 @@ void BaseGLWidget::initializeGL(){
     vertexAttr = shader_program.attributeLocation("vertexAttr");
     colorAttr = shader_program.attributeLocation("colorAttr");
     matrixUniform = shader_program.uniformLocation("projection");
+    modelViewMatrix = shader_program.uniformLocation("modelView");
 
-    pen = new Draw(&shader_program, vertexAttr, colorAttr);
+    pen = new Draw(&shader_program, vertexAttr, colorAttr, modelViewMatrix);
 
 }
 

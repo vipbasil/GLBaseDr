@@ -1,9 +1,10 @@
 #include "draw.h"
 
-Draw::Draw(QOpenGLShaderProgram *program, int LvertexAttr, int LcolorAttr):
+Draw::Draw(QOpenGLShaderProgram *program, int LvertexAttr, int LcolorAttr, int LmodelViewMatrix):
 shader_program(program),
 vertexAttr(LvertexAttr),
-colorAttr(LcolorAttr)
+colorAttr(LcolorAttr),
+modelViewMatrix(LmodelViewMatrix)
 {
     countAttr = 0;
 }
@@ -13,7 +14,12 @@ void Draw::addTriangle(std::vector<float> points, std::vector<float> color)
     ++countAttr;
     std::vector<float> allcolor;
     allcolor.resize(points.size());
+    QMatrix4x4 matrix;
+    matrix.setToIdentity();
 
+   // matrix.scale(0.5f, 0.6f);
+    matrix.rotate(1.2f, 1, 1, 0);
+    transformations.push_back(matrix);
     vertices.push_back(points);
 
     unsigned int i = 0;
@@ -95,6 +101,7 @@ void Draw::Paint(int index)
 
             shader_program->setAttributeArray(vertexAttr, vertices[i].data(), 3);
             shader_program->setAttributeArray(colorAttr, colors[i].data(), 3);
+            shader_program->setUniformValue(modelViewMatrix,transformations[i]);
 
             shader_program->enableAttributeArray(vertexAttr);
             shader_program->enableAttributeArray(colorAttr);
