@@ -2,7 +2,7 @@
 #define DRAW_H
 #include <vector>
 #include <QOpenGLShaderProgram>
-//#include <strings.h>
+#include <math.h>
 
 
 class Draw
