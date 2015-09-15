@@ -36,6 +36,16 @@ void Draw::addTriangle(std::vector<float> points, std::vector<float> color)
     colors.push_back(allcolor);
 
 }
+void Draw::addBasicTriangle(std::vector<float> points, std::vector<float> color)
+{
+    ++countAttr;
+    QMatrix4x4 matrix;
+    matrix.setToIdentity();
+    transformations.push_back(matrix);
+    vertices.push_back(points);
+    colors.push_back(color);
+
+}
 
 void Draw::addCircle(std::vector<float> point, std::vector<float> color, int radius,unsigned int tessellation)
 {

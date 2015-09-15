@@ -11,6 +11,7 @@ class Draw
     public:
         Draw( QOpenGLShaderProgram *program, int LvertexAttr, int LcolorAttr, int LmodelViewMatrix);
         void addTriangle(std::vector<float> points, std::vector<float> color );
+        void addBasicTriangle(std::vector<float> points, std::vector<float> color);
         void addCircle(std::vector<float> point, std::vector<float> color, int radius = 10, unsigned int tessellation = 36);
         void addLine(std::vector<float> points, std::vector<float> color, float width = 1);
         void deleteObject(int index);
